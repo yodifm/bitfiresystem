@@ -292,8 +292,9 @@ function CertificationSection() {
     { icon: BadgeCheck, label: "ISO Standard" },
   ];
   return (
-    <section className="py-16 md:py-20 bg-secondary">
-      <div className="container-page">
+    <section className="relative py-20 md:py-24 bg-secondary overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,var(--navy)_1px,transparent_0)] [background-size:32px_32px]" />
+      <div className="container-page relative">
         <Reveal>
           <SectionTitle
             center
@@ -305,9 +306,10 @@ function CertificationSection() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {badges.map((b, i) => (
             <Reveal key={b.label} delay={i * 60}>
-              <div className="h-full flex flex-col items-center justify-center gap-3 p-5 rounded-lg bg-white border border-border hover:border-brand hover:-translate-y-1 transition shadow-card">
-                <div className="grid place-items-center w-14 h-14 rounded-full bg-brand/10 text-brand">
-                  <b.icon className="w-7 h-7" />
+              <div className="group relative h-full flex flex-col items-center justify-center gap-3 p-6 rounded-lg bg-white border border-border hover:border-brand hover:-translate-y-1 hover:shadow-elegant transition-all duration-300 shadow-card overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/0 via-brand to-brand/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="grid place-items-center w-16 h-16 rounded-full bg-gradient-to-br from-brand/10 to-brand/5 text-brand group-hover:from-brand group-hover:to-brand-dark group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
+                  <b.icon className="w-8 h-8" />
                 </div>
                 <p className="text-xs md:text-sm font-bold text-navy text-center uppercase tracking-wide">
                   {b.label}
