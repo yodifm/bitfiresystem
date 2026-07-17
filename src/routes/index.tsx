@@ -248,25 +248,29 @@ function ProductsSection() {
           </Reveal>
 
           <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
-            {current.items.map((item, i) => (
-              <Reveal key={item.name} delay={i * 50}>
-                <div className="h-full p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-card transition group cursor-pointer">
-                  <div className="flex items-start gap-4">
-                    <div className="shrink-0 grid place-items-center w-11 h-11 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground transition">
-                      <Flame className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="font-display font-bold text-navy uppercase text-base leading-tight">
-                        {item.name}
-                      </h4>
-                      <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-                        {item.desc}
-                      </p>
+            {current.items.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Reveal key={item.name} delay={i * 50}>
+                  <div className="h-full p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 rounded-bl-full group-hover:bg-brand/10 transition" />
+                    <div className="relative flex items-start gap-4">
+                      <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
+                        <Icon className="w-6 h-6" strokeWidth={2} />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-display font-bold text-navy uppercase text-base leading-tight group-hover:text-brand transition">
+                          {item.name}
+                        </h4>
+                        <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </div>
