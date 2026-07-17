@@ -63,9 +63,8 @@ export function StatsSection() {
           ))}
         </div>
       </div>
-
-      {/* diagonal bottom accent to next section */}
-      <div className="absolute inset-x-0 -bottom-px h-16 bg-background [clip-path:polygon(0_100%,100%_100%,100%_0,0_100%)]" />
+      {/* red diagonal accent divider */}
+      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-brand to-transparent" />
     </section>
   );
 }
