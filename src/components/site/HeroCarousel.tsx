@@ -83,8 +83,25 @@ export function HeroCarousel() {
         </div>
       ))}
 
-      {/* Diagonal accent */}
+      {/* Blueprint grid overlay */}
+      <div className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(rgba(255,255,255,.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.6)_1px,transparent_1px)] [background-size:64px_64px] pointer-events-none" />
+
+      {/* Diagonal red accent */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-brand/10 -skew-x-12 translate-x-24 hidden lg:block" />
+
+      {/* Technical corner marks */}
+      <div className="absolute top-24 right-8 hidden lg:block text-white/50 text-[10px] font-mono tracking-widest z-10">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-px bg-brand" /> BFS · 01
+        </div>
+        <div className="mt-1 pl-5">N 06°14' · E 106°58'</div>
+      </div>
+      <div className="absolute bottom-32 right-8 hidden lg:block z-10">
+        <div className="border-l-2 border-brand pl-4">
+          <div className="font-display font-black text-white text-4xl leading-none">10+</div>
+          <div className="text-[10px] uppercase tracking-widest text-white/60 mt-1">Years of Trust</div>
+        </div>
+      </div>
 
       <div className="relative z-10 container-page flex flex-col justify-center min-h-[92vh] pt-24 pb-24">
         <div className="max-w-3xl">
