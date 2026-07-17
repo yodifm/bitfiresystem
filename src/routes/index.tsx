@@ -175,14 +175,18 @@ function ServicesSection() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {services.map((s, idx) => (
             <Reveal key={s.title} delay={idx * 60}>
-              <div className="group h-full p-6 rounded-lg bg-white/5 border border-white/10 hover:border-brand hover:bg-white/10 transition-all duration-300 hover:-translate-y-1">
-                <div className="grid place-items-center w-14 h-14 rounded-md bg-brand text-brand-foreground mb-4 group-hover:scale-110 transition">
-                  <s.icon className="w-7 h-7" />
+              <div className="group relative h-full p-6 rounded-lg bg-white/5 border border-white/10 hover:border-brand hover:bg-white/[0.08] transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant overflow-hidden">
+                <div className="absolute top-0 left-0 w-0 h-1 bg-brand group-hover:w-full transition-all duration-500" />
+                <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-brand/0 group-hover:bg-brand/10 blur-2xl transition-all duration-500" />
+                <div className="relative">
+                  <div className="grid place-items-center w-14 h-14 rounded-md bg-brand text-brand-foreground mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <s.icon className="w-7 h-7" />
+                  </div>
+                  <h4 className="font-display font-bold text-white text-lg uppercase leading-tight">
+                    {s.title}
+                  </h4>
+                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc}</p>
                 </div>
-                <h4 className="font-display font-bold text-white text-lg uppercase leading-tight">
-                  {s.title}
-                </h4>
-                <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc}</p>
               </div>
             </Reveal>
           ))}
