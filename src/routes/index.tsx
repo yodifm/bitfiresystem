@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
+import { StatsSection } from "@/components/site/StatsSection";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
 import { Reveal } from "@/components/site/Reveal";
 import { services, productTabs, values } from "@/components/site/data";
