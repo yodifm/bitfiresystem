@@ -550,6 +550,7 @@ function LandingPage() {
       <main>
         <HeroCarousel />
         <AboutSection />
+        <StatsSection />
         <ServicesSection />
         <ProductsSection />
         <CertificationSection />
