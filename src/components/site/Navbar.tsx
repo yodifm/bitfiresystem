@@ -1,17 +1,36 @@
 import { useEffect, useState } from "react";
-import { Flame, Menu, X } from "lucide-react";
+import { Flame, Menu, X, Languages } from "lucide-react";
+import { useLanguage, type Lang } from "./language";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const links = [
-  { href: "#home", label: "Home" },
-  { href: "#tentang", label: "Tentang Kami" },
-  { href: "#layanan", label: "Layanan" },
-  { href: "#produk", label: "Produk" },
-  { href: "#kontak", label: "Kontak" },
+const langOptions: { value: Lang; label: string }[] = [
+  { value: "id", label: "Indonesia" },
+  { value: "en", label: "English" },
+  { value: "zh", label: "中文" },
 ];
 
+function langCode(lang: Lang) {
+  return lang === "id" ? "ID" : lang === "en" ? "EN" : "中文";
+}
+
 export function Navbar() {
+  const { lang, setLang, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const links = [
+    { href: "#home", label: t.nav.home },
+    { href: "#tentang", label: t.nav.about },
+    { href: "#layanan", label: t.nav.services },
+    { href: "#produk", label: t.nav.products },
+    { href: "#galeri", label: t.nav.gallery },
+    { href: "#kontak", label: t.nav.contact },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -23,9 +42,7 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-navy/95 backdrop-blur border-b border-white/10 shadow-lg"
-          : "bg-transparent"
+        scrolled ? "bg-navy/95 backdrop-blur border-b border-white/10 shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="container-page flex items-center justify-between h-16 md:h-20">
@@ -53,21 +70,67 @@ export function Navbar() {
               {l.label}
             </a>
           ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                aria-label="Change language"
+                className="inline-flex items-center gap-1.5 rounded-md border border-white/25 text-white/85 hover:text-white hover:border-white/50 px-3 py-2 text-xs font-bold uppercase tracking-wider transition"
+              >
+                <Languages className="w-4 h-4" />
+                {langCode(lang)}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {langOptions.map((opt) => (
+                <DropdownMenuItem
+                  key={opt.value}
+                  onClick={() => setLang(opt.value)}
+                  className={lang === opt.value ? "font-bold text-brand" : ""}
+                >
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <a
             href="#kontak"
             className="inline-flex items-center rounded-md bg-brand hover:bg-brand-dark text-brand-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider transition"
           >
-            Get Quote
+            {t.nav.getQuote}
           </a>
         </nav>
 
-        <button
-          className="lg:hidden text-white p-2"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X /> : <Menu />}
-        </button>
+        <div className="lg:hidden flex items-center gap-1">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                aria-label="Change language"
+                className="inline-flex items-center gap-1 text-white/85 px-2 py-2 text-xs font-bold uppercase tracking-wider"
+              >
+                <Languages className="w-4 h-4" />
+                {langCode(lang)}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {langOptions.map((opt) => (
+                <DropdownMenuItem
+                  key={opt.value}
+                  onClick={() => setLang(opt.value)}
+                  className={lang === opt.value ? "font-bold text-brand" : ""}
+                >
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <button
+            className="text-white p-2"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -88,7 +151,7 @@ export function Navbar() {
               onClick={() => setOpen(false)}
               className="mt-3 inline-flex justify-center rounded-md bg-brand text-brand-foreground px-4 py-3 font-bold uppercase tracking-wider"
             >
-              Get Quote
+              {t.nav.getQuote}
             </a>
           </div>
         </div>

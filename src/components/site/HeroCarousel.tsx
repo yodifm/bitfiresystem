@@ -1,50 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ShieldCheck, Phone } from "lucide-react";
+import { useLanguage } from "./language";
 
-type Slide = {
-  image: string;
-  eyebrow: string;
-  title: string;
-  highlight: string;
-  desc: string;
-};
-
-const slides: Slide[] = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1920&q=80",
-    eyebrow: "Total Fire Safety Provider",
-    title: "Ensuring Fire Safety,",
-    highlight: "Save Life. Save Property.",
-    desc: "Solusi fire protection terintegrasi — dari engineering, produk bersertifikat, hingga training personel di seluruh Indonesia.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1920&q=80",
-    eyebrow: "Oil & Gas · Power Plant · High-Risk Building",
-    title: "Trusted Fire Protection for",
-    highlight: "Indonesia's Critical Industries",
-    desc: "Dipercaya melindungi fasilitas migas, pembangkit listrik, hotel, rumah sakit, dan bangunan tinggi berisiko tinggi.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=1920&q=80",
-    eyebrow: "Certified Equipment · SNI · UL · FM",
-    title: "Fire Hydrant, Fire Alarm &",
-    highlight: "Fire Fighting Equipment",
-    desc: "Produk lengkap bersertifikat standar nasional dan internasional untuk keandalan proteksi kebakaran.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1920&q=80",
-    eyebrow: "Engineering · Installation · Maintenance",
-    title: "Full-Service Fire Protection",
-    highlight: "From Design to After-Sales",
-    desc: "Tim engineer berpengalaman siap mendampingi proyek Anda dari perencanaan hingga pemeliharaan berkala.",
-  },
+const slideImages = [
+  "https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1920&q=80",
 ];
 
 export function HeroCarousel() {
+  const { t } = useLanguage();
+  const slides = t.hero.slides.map((s, idx) => ({ ...s, image: slideImages[idx] }));
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -60,7 +27,7 @@ export function HeroCarousel() {
   return (
     <section
       id="home"
-      className="relative min-h-[92vh] w-full overflow-hidden bg-navy"
+      className="relative min-h-screen w-full overflow-hidden bg-navy"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -99,11 +66,13 @@ export function HeroCarousel() {
       <div className="absolute bottom-32 right-8 hidden lg:block z-10">
         <div className="border-l-2 border-brand pl-4">
           <div className="font-display font-black text-white text-4xl leading-none">10+</div>
-          <div className="text-[10px] uppercase tracking-widest text-white/60 mt-1">Years of Trust</div>
+          <div className="text-[10px] uppercase tracking-widest text-white/60 mt-1">
+            Years of Trust
+          </div>
         </div>
       </div>
 
-      <div className="relative z-10 container-page flex flex-col justify-center min-h-[92vh] pt-24 pb-24">
+      <div className="relative z-10 container-page flex flex-col justify-center min-h-screen pt-24 pb-24">
         <div className="max-w-3xl">
           <div
             key={`eb-${i}`}
@@ -136,13 +105,13 @@ export function HeroCarousel() {
               href="#kontak"
               className="inline-flex items-center gap-2 rounded-md bg-brand hover:bg-brand-dark text-brand-foreground px-6 py-3.5 font-bold uppercase tracking-wider text-sm shadow-elegant transition"
             >
-              <Phone className="w-4 h-4" /> Hubungi Kami
+              <Phone className="w-4 h-4" /> {t.hero.contactUs}
             </a>
             <a
               href="#produk"
               className="inline-flex items-center gap-2 rounded-md border-2 border-white/30 hover:border-white bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 font-bold uppercase tracking-wider text-sm transition"
             >
-              <ShieldCheck className="w-4 h-4" /> Lihat Produk
+              <ShieldCheck className="w-4 h-4" /> {t.hero.viewProducts}
             </a>
           </div>
         </div>

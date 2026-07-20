@@ -78,10 +78,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "BitFire Systems International — Total Fire Safety Provider Indonesia" },
-      { name: "description", content: "PT. BitFire System International — Total Fire Safety Provider untuk Oil & Gas, Power Plant, High-Rise Building. Fire Hydrant, Fire Alarm, Fire Extinguisher bersertifikat SNI, UL & FM." },
+      {
+        name: "description",
+        content:
+          "PT. BitFire System International — Total Fire Safety Provider untuk Oil & Gas, Power Plant, High-Rise Building. Fire Hydrant, Fire Alarm, Fire Extinguisher bersertifikat SNI, UL & FM.",
+      },
       { name: "author", content: "BitFire Systems International" },
-      { property: "og:title", content: "BitFire Systems International — Total Fire Safety Provider" },
-      { property: "og:description", content: "Ensuring Fire Safety, Save Life Save Property. Solusi fire protection terintegrasi untuk industri Indonesia." },
+      {
+        property: "og:title",
+        content: "BitFire Systems International — Total Fire Safety Provider",
+      },
+      {
+        property: "og:description",
+        content:
+          "Ensuring Fire Safety, Save Life Save Property. Solusi fire protection terintegrasi untuk industri Indonesia.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -93,7 +104,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

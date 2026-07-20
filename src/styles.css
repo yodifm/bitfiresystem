@@ -48,10 +48,10 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.03 260);
   /* Brand red #B91C1C */
-  --brand: oklch(0.53 0.20 27);
+  --brand: oklch(0.53 0.2 27);
   --brand-foreground: oklch(0.99 0 0);
   --brand-dark: oklch(0.44 0.19 27);
-  --primary: oklch(0.53 0.20 27);
+  --primary: oklch(0.53 0.2 27);
   --primary-foreground: oklch(0.99 0 0);
   /* Navy #0F172A */
   --navy: oklch(0.22 0.04 260);
@@ -66,7 +66,7 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.9 0.01 260);
   --input: oklch(0.9 0.01 260);
-  --ring: oklch(0.53 0.20 27);
+  --ring: oklch(0.53 0.2 27);
 }
 
 @layer base {
@@ -78,7 +78,10 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
   }
@@ -95,18 +98,32 @@
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes slide-fade {
-  from { opacity: 0; transform: scale(1.05); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @utility reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 @utility reveal-in {
   opacity: 1;

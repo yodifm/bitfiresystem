@@ -14,13 +14,16 @@ import {
   Globe,
   Send,
   ArrowRight,
+  ZoomIn,
 } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import { StatsSection } from "@/components/site/StatsSection";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
 import { Reveal } from "@/components/site/Reveal";
-import { services, productTabs, values } from "@/components/site/data";
+import { services, productTabs, values, gallery, type ProductItem } from "@/components/site/data";
+import { LanguageProvider, useLanguage } from "@/components/site/language";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -86,6 +89,7 @@ function SectionTitle({
 }
 
 function AboutSection() {
+  const { t } = useLanguage();
   return (
     <section id="tentang" className="py-20 md:py-28 bg-background">
       <div className="container-page grid lg:grid-cols-2 gap-14 items-center">
@@ -103,9 +107,9 @@ function AboutSection() {
               <div className="flex items-center gap-3">
                 <Flame className="w-10 h-10 text-brand" />
                 <div>
-                  <p className="font-display font-black text-2xl">10+ Tahun</p>
+                  <p className="font-display font-black text-2xl">{t.about.experience}</p>
                   <p className="text-xs uppercase tracking-widest text-white/70">
-                    Pengalaman Industri
+                    {t.about.experienceLabel}
                   </p>
                 </div>
               </div>
@@ -114,21 +118,17 @@ function AboutSection() {
         </Reveal>
 
         <Reveal delay={100}>
-          <SectionTitle
-            eyebrow="Tentang Kami"
-            title="Total Fire Safety Provider Terpercaya"
-            desc="PT. BitFire System International adalah penyedia solusi fire safety terintegrasi. Kami berpengalaman di bidang engineering, product testing, personnel development, dan training untuk memastikan setiap sistem proteksi kebakaran bekerja optimal."
-          />
+          <SectionTitle eyebrow={t.about.eyebrow} title={t.about.title} desc={t.about.desc} />
           <div className="space-y-5">
             <div className="flex gap-4 p-5 rounded-lg border border-border bg-card shadow-card">
               <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand">
                 <Eye className="w-6 h-6" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-display font-bold text-lg text-navy uppercase">Visi</h4>
-                <p className="text-sm text-muted-foreground mt-1">
-                  To be a Leading Fire Fighting Industries in Indonesia.
-                </p>
+                <h4 className="font-display font-bold text-lg text-navy uppercase">
+                  {t.about.visiTitle}
+                </h4>
+                <p className="text-sm text-muted-foreground mt-1">{t.about.visiDesc}</p>
               </div>
             </div>
             <div className="flex gap-4 p-5 rounded-lg border border-border bg-card shadow-card">
@@ -136,13 +136,11 @@ function AboutSection() {
                 <Target className="w-6 h-6" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-display font-bold text-lg text-navy uppercase">Misi</h4>
+                <h4 className="font-display font-bold text-lg text-navy uppercase">
+                  {t.about.misiTitle}
+                </h4>
                 <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-                  {[
-                    "Menyediakan produk berkualitas dengan harga bersaing.",
-                    "Inovasi produk & layanan berkelanjutan.",
-                    "Membangun performa tinggi & kepuasan pelanggan.",
-                  ].map((m) => (
+                  {t.about.misiItems.map((m) => (
                     <li key={m} className="flex gap-2">
                       <CheckCircle2 className="w-4 h-4 text-brand shrink-0 mt-0.5" />
                       <span>{m}</span>
@@ -159,6 +157,7 @@ function AboutSection() {
 }
 
 function ServicesSection() {
+  const { t, lang } = useLanguage();
   return (
     <section id="layanan" className="relative py-20 md:py-28 bg-navy overflow-hidden">
       <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:32px_32px]" />
@@ -167,9 +166,9 @@ function ServicesSection() {
           <SectionTitle
             invert
             center
-            eyebrow="Scope of Services"
-            title="Industri yang Kami Lindungi"
-            desc="Solusi fire protection kami disesuaikan untuk beragam sektor bisnis di seluruh Indonesia."
+            eyebrow={t.services.eyebrow}
+            title={t.services.title}
+            desc={t.services.desc}
           />
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -185,7 +184,7 @@ function ServicesSection() {
                   <h4 className="font-display font-bold text-white text-lg uppercase leading-tight">
                     {s.title}
                   </h4>
-                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc}</p>
+                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc[lang]}</p>
                 </div>
               </div>
             </Reveal>
@@ -197,8 +196,10 @@ function ServicesSection() {
 }
 
 function ProductsSection() {
+  const { t, lang } = useLanguage();
   const [active, setActive] = useState(productTabs[0].key);
-  const current = productTabs.find((t) => t.key === active)!;
+  const [selected, setSelected] = useState<ProductItem | null>(null);
+  const current = productTabs.find((tab) => tab.key === active)!;
 
   return (
     <section id="produk" className="py-20 md:py-28 bg-background">
@@ -206,25 +207,25 @@ function ProductsSection() {
         <Reveal>
           <SectionTitle
             center
-            eyebrow="Produk Kami"
-            title="Fire Safety Equipment Lengkap"
-            desc="Rangkaian produk fire protection bersertifikat untuk kebutuhan proyek Anda."
+            eyebrow={t.products.eyebrow}
+            title={t.products.title}
+            desc={t.products.desc}
           />
         </Reveal>
 
         <Reveal>
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
-            {productTabs.map((t) => (
+            {productTabs.map((tab) => (
               <button
-                key={t.key}
-                onClick={() => setActive(t.key)}
+                key={tab.key}
+                onClick={() => setActive(tab.key)}
                 className={`px-4 md:px-6 py-2.5 rounded-md font-bold uppercase text-xs md:text-sm tracking-wider transition ${
-                  active === t.key
+                  active === tab.key
                     ? "bg-brand text-brand-foreground shadow-elegant"
                     : "bg-secondary text-navy hover:bg-navy hover:text-white"
                 }`}
               >
-                {t.label}
+                {tab.label}
               </button>
             ))}
           </div>
@@ -242,7 +243,7 @@ function ProductsSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <p className="text-xs font-bold uppercase tracking-widest text-brand mb-1">
-                  Kategori
+                  {t.products.kategori}
                 </p>
                 <h3 className="font-display font-black text-white text-3xl md:text-4xl uppercase leading-tight">
                   {current.label}
@@ -256,7 +257,11 @@ function ProductsSection() {
               const Icon = item.icon;
               return (
                 <Reveal key={item.name} delay={i * 50}>
-                  <div className="h-full p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setSelected(item)}
+                    className="w-full h-full text-left p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden"
+                  >
                     <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 rounded-bl-full group-hover:bg-brand/10 transition" />
                     <div className="relative flex items-start gap-4">
                       <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
@@ -267,30 +272,111 @@ function ProductsSection() {
                           {item.name}
                         </h4>
                         <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-                          {item.desc}
+                          {item.desc[lang]}
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 </Reveal>
               );
             })}
           </div>
         </div>
       </div>
+
+      <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+        <DialogContent className="max-w-lg p-0 overflow-hidden">
+          {selected && (
+            <>
+              <img
+                src={selected.image}
+                alt={selected.name}
+                className="w-full h-64 object-cover"
+                loading="lazy"
+              />
+              <div className="p-6">
+                <DialogTitle className="font-display font-black uppercase text-navy text-xl">
+                  {selected.name}
+                </DialogTitle>
+                <DialogDescription className="mt-2 text-sm leading-relaxed">
+                  {selected.desc[lang]}
+                </DialogDescription>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </section>
+  );
+}
+
+function GallerySection() {
+  const { t, lang } = useLanguage();
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const selected = openIdx !== null ? gallery[openIdx] : null;
+
+  return (
+    <section id="galeri" className="py-20 md:py-28 bg-background">
+      <div className="container-page">
+        <Reveal>
+          <SectionTitle
+            center
+            eyebrow={t.gallery.eyebrow}
+            title={t.gallery.title}
+            desc={t.gallery.desc}
+          />
+        </Reveal>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+          {gallery.map((g, i) => (
+            <Reveal key={g.image} delay={i * 50}>
+              <button
+                type="button"
+                onClick={() => setOpenIdx(i)}
+                className="group relative w-full aspect-square rounded-lg overflow-hidden shadow-card block"
+              >
+                <img
+                  src={g.image}
+                  alt={g.caption[lang]}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/60 transition-colors duration-300 flex items-center justify-center">
+                  <ZoomIn className="w-7 h-7 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+                <p className="absolute bottom-0 left-0 right-0 p-3 text-xs font-semibold text-white bg-gradient-to-t from-navy/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {g.caption[lang]}
+                </p>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+
+      <Dialog open={openIdx !== null} onOpenChange={(open) => !open && setOpenIdx(null)}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden">
+          {selected && (
+            <>
+              <img
+                src={selected.image}
+                alt={selected.caption[lang]}
+                className="w-full max-h-[75vh] object-contain bg-navy"
+              />
+              <DialogTitle className="px-6 py-4 font-display font-bold uppercase text-navy text-lg">
+                {selected.caption[lang]}
+              </DialogTitle>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
 
 function CertificationSection() {
-  const badges = [
-    { icon: BadgeCheck, label: "PT Berbadan Hukum" },
-    { icon: Award, label: "Terdaftar NIB & NPWP" },
-    { icon: ShieldCheck, label: "SNI 180-1:2022" },
-    { icon: Award, label: "UL Listed" },
-    { icon: ShieldCheck, label: "FM Approved" },
-    { icon: BadgeCheck, label: "ISO Standard" },
-  ];
+  const { t } = useLanguage();
+  const icons = [BadgeCheck, Award, ShieldCheck, Award, ShieldCheck, BadgeCheck];
+  const badges = t.certification.badges.map((label, i) => ({ icon: icons[i], label }));
   return (
     <section className="relative py-20 md:py-24 bg-secondary overflow-hidden">
       <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,var(--navy)_1px,transparent_0)] [background-size:32px_32px]" />
@@ -298,9 +384,9 @@ function CertificationSection() {
         <Reveal>
           <SectionTitle
             center
-            eyebrow="Sertifikasi & Legalitas"
-            title="Standar Nasional & Internasional"
-            desc="Perusahaan resmi berbadan hukum dan produk-produk bersertifikat standar terpercaya."
+            eyebrow={t.certification.eyebrow}
+            title={t.certification.title}
+            desc={t.certification.desc}
           />
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -324,19 +410,16 @@ function CertificationSection() {
 }
 
 function WhyUsSection() {
+  const { t, lang } = useLanguage();
   return (
     <section className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div className="container-page">
         <Reveal>
-          <SectionTitle
-            center
-            eyebrow="Kenapa Memilih Kami"
-            title="Partner Fire Safety yang Bisa Diandalkan"
-          />
+          <SectionTitle center eyebrow={t.whyUs.eyebrow} title={t.whyUs.title} />
         </Reveal>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           {values.map((v, i) => (
-            <Reveal key={v.title} delay={i * 80}>
+            <Reveal key={v.title.id} delay={i * 80}>
               <div className="group h-full p-6 rounded-lg bg-navy text-white hover:bg-brand transition-all duration-300 relative overflow-hidden">
                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/5 group-hover:bg-white/10 transition" />
                 <div className="relative">
@@ -344,10 +427,10 @@ function WhyUsSection() {
                     0{i + 1}
                   </div>
                   <h4 className="font-display font-bold text-xl uppercase leading-tight">
-                    {v.title}
+                    {v.title[lang]}
                   </h4>
                   <p className="mt-3 text-sm text-white/75 group-hover:text-white/90 leading-relaxed">
-                    {v.desc}
+                    {v.desc[lang]}
                   </p>
                 </div>
               </div>
@@ -360,6 +443,7 @@ function WhyUsSection() {
 }
 
 function ContactSection() {
+  const { t } = useLanguage();
   const [sent, setSent] = useState(false);
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -377,9 +461,9 @@ function ContactSection() {
         <Reveal>
           <SectionTitle
             invert
-            eyebrow="Hubungi Kami"
-            title="Diskusikan Kebutuhan Fire Safety Anda"
-            desc="Tim kami siap memberikan konsultasi, penawaran, dan dukungan teknis untuk setiap proyek."
+            eyebrow={t.contact.eyebrow}
+            title={t.contact.title}
+            desc={t.contact.desc}
           />
         </Reveal>
 
@@ -387,7 +471,7 @@ function ContactSection() {
           <Reveal className="lg:col-span-2 space-y-4">
             <ContactItem
               icon={MapPin}
-              title="Head Office"
+              title={t.contact.headOffice}
               lines={[
                 "Ruko Rose Garden I No. 8/51,",
                 "Grand Galaxy City, Jakasetia,",
@@ -396,25 +480,25 @@ function ContactSection() {
             />
             <ContactItem
               icon={Phone}
-              title="Telp / Fax"
+              title={t.contact.telFax}
               lines={["+62 21 5692 7856", "+62 21 8275 3349"]}
               href="tel:+622156927856"
             />
             <ContactItem
               icon={Phone}
-              title="Mobile / WhatsApp"
+              title={t.contact.mobile}
               lines={["+62 813 8014 0997"]}
               href="https://wa.me/6281380140997"
             />
             <ContactItem
               icon={Mail}
-              title="Email"
+              title={t.contact.email}
               lines={["bitfireindo@yahoo.co.id"]}
               href="mailto:bitfireindo@yahoo.co.id"
             />
             <ContactItem
               icon={Globe}
-              title="Website"
+              title={t.contact.website}
               lines={["www.bitfiresystem.com"]}
               href="https://www.bitfiresystem.com"
             />
@@ -426,36 +510,33 @@ function ContactSection() {
               className="p-6 md:p-8 rounded-lg bg-white/5 border border-white/10 backdrop-blur"
             >
               <div className="grid md:grid-cols-2 gap-4">
-                <Field label="Nama Lengkap" name="name" required />
-                <Field label="Email" name="email" type="email" required />
+                <Field label={t.contact.form.name} name="name" required />
+                <Field label={t.contact.form.email} name="email" type="email" required />
               </div>
               <div className="grid md:grid-cols-2 gap-4 mt-4">
-                <Field label="Nomor Telepon" name="phone" />
-                <Field label="Perusahaan" name="company" />
+                <Field label={t.contact.form.phone} name="phone" />
+                <Field label={t.contact.form.company} name="company" />
               </div>
               <div className="mt-4">
                 <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-2">
-                  Pesan
+                  {t.contact.form.message}
                 </label>
                 <textarea
                   name="message"
                   required
                   rows={5}
                   className="w-full rounded-md bg-white/5 border border-white/15 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30 transition"
-                  placeholder="Ceritakan kebutuhan proyek Anda..."
+                  placeholder={t.contact.form.messagePlaceholder}
                 />
               </div>
               <button
                 type="submit"
                 className="mt-6 inline-flex items-center gap-2 rounded-md bg-brand hover:bg-brand-dark text-brand-foreground px-6 py-3.5 font-bold uppercase tracking-wider text-sm shadow-elegant transition"
               >
-                {sent ? "Terkirim!" : "Kirim Pesan"} <Send className="w-4 h-4" />
+                {sent ? t.contact.form.submitted : t.contact.form.submit}{" "}
+                <Send className="w-4 h-4" />
               </button>
-              {sent && (
-                <p className="mt-3 text-sm text-green-400">
-                  Terima kasih! Tim kami akan menghubungi Anda segera.
-                </p>
-              )}
+              {sent && <p className="mt-3 text-sm text-green-400">{t.contact.form.thankYou}</p>}
             </form>
           </Reveal>
         </div>
@@ -524,6 +605,7 @@ function ContactItem({
 }
 
 function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="bg-[#08101f] text-white/70 py-10 border-t border-white/10">
       <div className="container-page grid md:grid-cols-3 gap-8 items-center">
@@ -539,10 +621,10 @@ function Footer() {
           </div>
         </div>
         <p className="text-sm md:text-center font-semibold text-white/80 italic">
-          "Ensuring Fire Safety, Save Life Save Property"
+          {t.footer.tagline}
         </p>
         <p className="text-xs md:text-right">
-          © {new Date().getFullYear()} PT. BitFire System International. All rights reserved.
+          © {new Date().getFullYear()} PT. BitFire System International. {t.footer.rights}
         </p>
       </div>
     </footer>
@@ -551,33 +633,37 @@ function Footer() {
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
-      <Navbar />
-      <main>
-        <HeroCarousel />
-        <AboutSection />
-        <StatsSection />
-        <ServicesSection />
-        <ProductsSection />
-        <CertificationSection />
-        <WhyUsSection />
-        <ContactSection />
-      </main>
-      <Footer />
-      <WhatsAppFab />
-      <ScrollHint />
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        <Navbar />
+        <main>
+          <HeroCarousel />
+          <AboutSection />
+          <StatsSection />
+          <ServicesSection />
+          <ProductsSection />
+          <GallerySection />
+          <CertificationSection />
+          <WhyUsSection />
+          <ContactSection />
+        </main>
+        <Footer />
+        <WhatsAppFab />
+        <ScrollHint />
+      </div>
+    </LanguageProvider>
   );
 }
 
 function ScrollHint() {
+  const { t } = useLanguage();
   return (
     <a
       href="#tentang"
       aria-label="Scroll down"
       className="hidden md:flex fixed bottom-6 left-6 z-30 items-center gap-2 text-white/70 hover:text-white text-xs font-bold uppercase tracking-widest [writing-mode:vertical-rl] rotate-180"
     >
-      <ArrowRight className="w-4 h-4" /> Scroll
+      <ArrowRight className="w-4 h-4" /> {t.hero.scroll}
     </a>
   );
 }
