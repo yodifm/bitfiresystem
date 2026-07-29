@@ -94,7 +94,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Ensuring Fire Safety, Save Life Save Property. Solusi fire protection terintegrasi untuk industri Indonesia.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.bitfiresystem.com/" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        "script:ld+json": {
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "@id": "https://www.bitfiresystem.com/#organization",
+          name: "PT. BitFire System International",
+          alternateName: "BitFire Systems International",
+          description:
+            "Total Fire Safety Provider untuk Oil & Gas, Power Plant, High-Rise Building. Fire Hydrant, Fire Alarm, Fire Extinguisher bersertifikat SNI, UL & FM.",
+          url: "https://www.bitfiresystem.com",
+          telephone: "+62-21-5692-7856",
+          email: "bitfireindo@yahoo.co.id",
+          image:
+            "https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1200&q=80",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Ruko Rose Garden I No. 8/51, Grand Galaxy City, Jakasetia",
+            addressLocality: "Bekasi Selatan",
+            addressRegion: "Jawa Barat",
+            postalCode: "17148",
+            addressCountry: "ID",
+          },
+          areaServed: "ID",
+          priceRange: "$$",
+        },
+      },
     ],
     links: [
       {
@@ -102,6 +129,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "canonical", href: "https://www.bitfiresystem.com/" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

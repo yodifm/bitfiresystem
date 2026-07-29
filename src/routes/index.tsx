@@ -447,9 +447,31 @@ function ContactSection() {
   const [sent, setSent] = useState(false);
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
+    const name = data.get("name") as string;
+    const email = data.get("email") as string;
+    const phone = data.get("phone") as string;
+    const company = data.get("company") as string;
+    const message = data.get("message") as string;
+
+    const lines = [
+      "Halo BitFire Systems, saya ingin bertanya:",
+      "",
+      `Nama: ${name}`,
+      `Email: ${email}`,
+      ...(phone ? [`Telepon: ${phone}`] : []),
+      ...(company ? [`Perusahaan: ${company}`] : []),
+      `Pertanyaan: ${message}`,
+    ];
+    window.open(
+      `https://wa.me/6281380140997?text=${encodeURIComponent(lines.join("\n"))}`,
+      "_blank",
+    );
+
     setSent(true);
     setTimeout(() => setSent(false), 4000);
-    (e.target as HTMLFormElement).reset();
+    form.reset();
   };
 
   return (
