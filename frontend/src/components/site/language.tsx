@@ -32,7 +32,7 @@ export type UiText = {
   services: { eyebrow: string; title: string; desc: string };
   products: { eyebrow: string; title: string; desc: string; kategori: string };
   gallery: { eyebrow: string; title: string; desc: string };
-  certification: { eyebrow: string; title: string; desc: string; badges: string[] };
+  certification: { eyebrow: string; title: string; desc: string };
   whyUs: { eyebrow: string; title: string };
   contact: {
     eyebrow: string;
@@ -135,14 +135,6 @@ const uiText: Record<Lang, UiText> = {
       eyebrow: "Sertifikasi & Legalitas",
       title: "Standar Nasional & Internasional",
       desc: "Perusahaan resmi berbadan hukum dan produk-produk bersertifikat standar terpercaya.",
-      badges: [
-        "PT Berbadan Hukum",
-        "Terdaftar NIB & NPWP",
-        "SNI 180-1:2022",
-        "UL Listed",
-        "FM Approved",
-        "ISO Standard",
-      ],
     },
     whyUs: {
       eyebrow: "Kenapa Memilih Kami",
@@ -250,14 +242,6 @@ const uiText: Record<Lang, UiText> = {
       eyebrow: "Certification & Legality",
       title: "National & International Standards",
       desc: "An officially licensed company with products certified to trusted standards.",
-      badges: [
-        "Licensed Company",
-        "Registered NIB & NPWP",
-        "SNI 180-1:2022",
-        "UL Listed",
-        "FM Approved",
-        "ISO Standard",
-      ],
     },
     whyUs: {
       eyebrow: "Why Choose Us",
@@ -365,14 +349,6 @@ const uiText: Record<Lang, UiText> = {
       eyebrow: "认证与合法性",
       title: "国家及国际标准",
       desc: "正规注册公司，产品均通过可信标准认证。",
-      badges: [
-        "合法注册公司",
-        "已注册 NIB 与 NPWP",
-        "SNI 180-1:2022",
-        "UL 认证",
-        "FM 认证",
-        "ISO 标准",
-      ],
     },
     whyUs: {
       eyebrow: "为何选择我们",

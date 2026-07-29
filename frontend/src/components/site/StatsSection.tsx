@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Reveal } from "./Reveal";
-import { stats } from "./data";
+import { getStats } from "@/lib/api";
 import { useLanguage } from "./language";
 
 function Counter({ end, suffix }: { end: number; suffix: string }) {
@@ -44,6 +45,7 @@ function Counter({ end, suffix }: { end: number; suffix: string }) {
 
 export function StatsSection() {
   const { lang } = useLanguage();
+  const { data: stats } = useQuery({ queryKey: ["stats"], queryFn: getStats });
   return (
     <section className="relative bg-navy text-white overflow-hidden">
       {/* diagonal top accent */}
@@ -53,7 +55,7 @@ export function StatsSection() {
 
       <div className="container-page relative py-20 md:py-24">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {stats.map((s, i) => (
+          {stats?.map((s, i) => (
             <Reveal key={s.label.id} delay={i * 100}>
               <div className="group relative p-6 md:p-8 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-brand/60 transition-all duration-500 hover:-translate-y-1">
                 <div className="absolute top-0 left-0 w-12 h-1 bg-brand" />

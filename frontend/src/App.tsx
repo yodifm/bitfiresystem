@@ -1,12 +1,9 @@
 import { useState, type FormEvent } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Target,
   Eye,
   CheckCircle2,
-  Award,
-  ShieldCheck,
-  BadgeCheck,
-  Flame,
   MapPin,
   Phone,
   Mail,
@@ -14,15 +11,25 @@ import {
   Send,
   ArrowRight,
   ZoomIn,
+  Flame,
 } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import { StatsSection } from "@/components/site/StatsSection";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
 import { Reveal } from "@/components/site/Reveal";
-import { services, productTabs, values, gallery, type ProductItem } from "@/components/site/data";
 import { LanguageProvider, useLanguage } from "@/components/site/language";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  getServices,
+  getProductCategories,
+  getGallery,
+  getValueProps,
+  getCertifications,
+  postContactMessage,
+} from "@/lib/api";
+import { getIcon } from "@/lib/icons";
+import type { ProductItem } from "@/lib/types";
 
 function SectionTitle({
   eyebrow,
@@ -139,6 +146,8 @@ function AboutSection() {
 
 function ServicesSection() {
   const { t, lang } = useLanguage();
+  const { data: services } = useQuery({ queryKey: ["services"], queryFn: getServices });
+
   return (
     <section id="layanan" className="relative py-20 md:py-28 bg-navy overflow-hidden">
       <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:32px_32px]" />
@@ -153,23 +162,26 @@ function ServicesSection() {
           />
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {services.map((s, idx) => (
-            <Reveal key={s.title} delay={idx * 60}>
-              <div className="group relative h-full p-6 rounded-lg bg-white/5 border border-white/10 hover:border-brand hover:bg-white/[0.08] transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant overflow-hidden">
-                <div className="absolute top-0 left-0 w-0 h-1 bg-brand group-hover:w-full transition-all duration-500" />
-                <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-brand/0 group-hover:bg-brand/10 blur-2xl transition-all duration-500" />
-                <div className="relative">
-                  <div className="grid place-items-center w-14 h-14 rounded-md bg-brand text-brand-foreground mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                    <s.icon className="w-7 h-7" />
+          {services?.map((s, idx) => {
+            const Icon = getIcon(s.icon);
+            return (
+              <Reveal key={s.title} delay={idx * 60}>
+                <div className="group relative h-full p-6 rounded-lg bg-white/5 border border-white/10 hover:border-brand hover:bg-white/[0.08] transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant overflow-hidden">
+                  <div className="absolute top-0 left-0 w-0 h-1 bg-brand group-hover:w-full transition-all duration-500" />
+                  <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-brand/0 group-hover:bg-brand/10 blur-2xl transition-all duration-500" />
+                  <div className="relative">
+                    <div className="grid place-items-center w-14 h-14 rounded-md bg-brand text-brand-foreground mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                      <Icon className="w-7 h-7" />
+                    </div>
+                    <h4 className="font-display font-bold text-white text-lg uppercase leading-tight">
+                      {s.title}
+                    </h4>
+                    <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc[lang]}</p>
                   </div>
-                  <h4 className="font-display font-bold text-white text-lg uppercase leading-tight">
-                    {s.title}
-                  </h4>
-                  <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc[lang]}</p>
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -178,9 +190,13 @@ function ServicesSection() {
 
 function ProductsSection() {
   const { t, lang } = useLanguage();
-  const [active, setActive] = useState(productTabs[0].key);
+  const { data: productTabs } = useQuery({
+    queryKey: ["product-categories"],
+    queryFn: getProductCategories,
+  });
+  const [active, setActive] = useState<string | null>(null);
   const [selected, setSelected] = useState<ProductItem | null>(null);
-  const current = productTabs.find((tab) => tab.key === active)!;
+  const current = productTabs?.find((tab) => tab.key === (active ?? productTabs?.[0]?.key));
 
   return (
     <section id="produk" className="py-20 md:py-28 bg-background">
@@ -196,12 +212,12 @@ function ProductsSection() {
 
         <Reveal>
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
-            {productTabs.map((tab) => (
+            {productTabs?.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActive(tab.key)}
                 className={`px-4 md:px-6 py-2.5 rounded-md font-bold uppercase text-xs md:text-sm tracking-wider transition ${
-                  active === tab.key
+                  current?.key === tab.key
                     ? "bg-brand text-brand-foreground shadow-elegant"
                     : "bg-secondary text-navy hover:bg-navy hover:text-white"
                 }`}
@@ -212,57 +228,59 @@ function ProductsSection() {
           </div>
         </Reveal>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          <Reveal>
-            <div className="lg:sticky lg:top-24 rounded-lg overflow-hidden shadow-elegant relative group h-72 lg:h-[520px]">
-              <img
-                src={current.image}
-                alt={current.label}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-brand mb-1">
-                  {t.products.kategori}
-                </p>
-                <h3 className="font-display font-black text-white text-3xl md:text-4xl uppercase leading-tight">
-                  {current.label}
-                </h3>
+        {current && (
+          <div className="grid lg:grid-cols-3 gap-8">
+            <Reveal>
+              <div className="lg:sticky lg:top-24 rounded-lg overflow-hidden shadow-elegant relative group h-72 lg:h-[520px]">
+                <img
+                  src={current.image}
+                  alt={current.label}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-xs font-bold uppercase tracking-widest text-brand mb-1">
+                    {t.products.kategori}
+                  </p>
+                  <h3 className="font-display font-black text-white text-3xl md:text-4xl uppercase leading-tight">
+                    {current.label}
+                  </h3>
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
-            {current.items.map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <Reveal key={item.name} delay={i * 50}>
-                  <button
-                    type="button"
-                    onClick={() => setSelected(item)}
-                    className="w-full h-full text-left p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden"
-                  >
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 rounded-bl-full group-hover:bg-brand/10 transition" />
-                    <div className="relative flex items-start gap-4">
-                      <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
-                        <Icon className="w-6 h-6" strokeWidth={2} />
+            <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+              {current.items.map((item, i) => {
+                const Icon = getIcon(item.icon);
+                return (
+                  <Reveal key={item.name} delay={i * 50}>
+                    <button
+                      type="button"
+                      onClick={() => setSelected(item)}
+                      className="w-full h-full text-left p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 rounded-bl-full group-hover:bg-brand/10 transition" />
+                      <div className="relative flex items-start gap-4">
+                        <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
+                          <Icon className="w-6 h-6" strokeWidth={2} />
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="font-display font-bold text-navy uppercase text-base leading-tight group-hover:text-brand transition">
+                            {item.name}
+                          </h4>
+                          <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                            {item.desc[lang]}
+                          </p>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <h4 className="font-display font-bold text-navy uppercase text-base leading-tight group-hover:text-brand transition">
-                          {item.name}
-                        </h4>
-                        <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-                          {item.desc[lang]}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
-                </Reveal>
-              );
-            })}
+                    </button>
+                  </Reveal>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
@@ -293,8 +311,9 @@ function ProductsSection() {
 
 function GallerySection() {
   const { t, lang } = useLanguage();
+  const { data: gallery } = useQuery({ queryKey: ["gallery"], queryFn: getGallery });
   const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const selected = openIdx !== null ? gallery[openIdx] : null;
+  const selected = openIdx !== null ? gallery?.[openIdx] : null;
 
   return (
     <section id="galeri" className="py-20 md:py-28 bg-background">
@@ -309,7 +328,7 @@ function GallerySection() {
         </Reveal>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-          {gallery.map((g, i) => (
+          {gallery?.map((g, i) => (
             <Reveal key={g.image} delay={i * 50}>
               <button
                 type="button"
@@ -356,8 +375,12 @@ function GallerySection() {
 
 function CertificationSection() {
   const { t } = useLanguage();
-  const icons = [BadgeCheck, Award, ShieldCheck, Award, ShieldCheck, BadgeCheck];
-  const badges = t.certification.badges.map((label, i) => ({ icon: icons[i], label }));
+  const { lang } = useLanguage();
+  const { data: certifications } = useQuery({
+    queryKey: ["certifications"],
+    queryFn: getCertifications,
+  });
+
   return (
     <section className="relative py-20 md:py-24 bg-secondary overflow-hidden">
       <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,var(--navy)_1px,transparent_0)] [background-size:32px_32px]" />
@@ -371,19 +394,22 @@ function CertificationSection() {
           />
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {badges.map((b, i) => (
-            <Reveal key={b.label} delay={i * 60}>
-              <div className="group relative h-full flex flex-col items-center justify-center gap-3 p-6 rounded-lg bg-white border border-border hover:border-brand hover:-translate-y-1 hover:shadow-elegant transition-all duration-300 shadow-card overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/0 via-brand to-brand/0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="grid place-items-center w-16 h-16 rounded-full bg-gradient-to-br from-brand/10 to-brand/5 text-brand group-hover:from-brand group-hover:to-brand-dark group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
-                  <b.icon className="w-8 h-8" />
+          {certifications?.map((b, i) => {
+            const Icon = getIcon(b.icon);
+            return (
+              <Reveal key={b.label.id} delay={i * 60}>
+                <div className="group relative h-full flex flex-col items-center justify-center gap-3 p-6 rounded-lg bg-white border border-border hover:border-brand hover:-translate-y-1 hover:shadow-elegant transition-all duration-300 shadow-card overflow-hidden">
+                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/0 via-brand to-brand/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="grid place-items-center w-16 h-16 rounded-full bg-gradient-to-br from-brand/10 to-brand/5 text-brand group-hover:from-brand group-hover:to-brand-dark group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
+                    <Icon className="w-8 h-8" />
+                  </div>
+                  <p className="text-xs md:text-sm font-bold text-navy text-center uppercase tracking-wide">
+                    {b.label[lang]}
+                  </p>
                 </div>
-                <p className="text-xs md:text-sm font-bold text-navy text-center uppercase tracking-wide">
-                  {b.label}
-                </p>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -392,6 +418,8 @@ function CertificationSection() {
 
 function WhyUsSection() {
   const { t, lang } = useLanguage();
+  const { data: values } = useQuery({ queryKey: ["value-props"], queryFn: getValueProps });
+
   return (
     <section className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div className="container-page">
@@ -399,7 +427,7 @@ function WhyUsSection() {
           <SectionTitle center eyebrow={t.whyUs.eyebrow} title={t.whyUs.title} />
         </Reveal>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {values.map((v, i) => (
+          {values?.map((v, i) => (
             <Reveal key={v.title.id} delay={i * 80}>
               <div className="group h-full p-6 rounded-lg bg-navy text-white hover:bg-brand transition-all duration-300 relative overflow-hidden">
                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/5 group-hover:bg-white/10 transition" />
@@ -436,11 +464,7 @@ function ContactSection() {
     const company = data.get("company") as string;
     const message = data.get("message") as string;
 
-    fetch(`${import.meta.env.VITE_API_URL ?? "http://localhost:8000"}/api/contact-messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, company, message }),
-    }).catch(() => {
+    postContactMessage({ name, email, phone, company, message }).catch(() => {
       // Non-blocking: WhatsApp redirect below is the primary delivery channel.
     });
 

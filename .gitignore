@@ -1,3 +1,6 @@
+# Local-only dev MySQL data directory (see README) — never commit database files
+backend-mysql-dev/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
