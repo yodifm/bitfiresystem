@@ -1,5 +1,4 @@
 import { useState, type FormEvent } from "react";
-import { createFileRoute } from "@tanstack/react-router";
 import {
   Target,
   Eye,
@@ -24,24 +23,6 @@ import { Reveal } from "@/components/site/Reveal";
 import { services, productTabs, values, gallery, type ProductItem } from "@/components/site/data";
 import { LanguageProvider, useLanguage } from "@/components/site/language";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      {
-        property: "og:image",
-        content:
-          "https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1200&q=80",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1200&q=80",
-      },
-    ],
-  }),
-  component: LandingPage,
-});
 
 function SectionTitle({
   eyebrow,
@@ -455,6 +436,14 @@ function ContactSection() {
     const company = data.get("company") as string;
     const message = data.get("message") as string;
 
+    fetch(`${import.meta.env.VITE_API_URL ?? "http://localhost:8000"}/api/contact-messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone, company, message }),
+    }).catch(() => {
+      // Non-blocking: WhatsApp redirect below is the primary delivery channel.
+    });
+
     const lines = [
       "Halo BitFire Systems, saya ingin bertanya:",
       "",
@@ -653,7 +642,20 @@ function Footer() {
   );
 }
 
-function LandingPage() {
+function ScrollHint() {
+  const { t } = useLanguage();
+  return (
+    <a
+      href="#tentang"
+      aria-label="Scroll down"
+      className="hidden md:flex fixed bottom-6 left-6 z-30 items-center gap-2 text-white/70 hover:text-white text-xs font-bold uppercase tracking-widest [writing-mode:vertical-rl] rotate-180"
+    >
+      <ArrowRight className="w-4 h-4" /> {t.hero.scroll}
+    </a>
+  );
+}
+
+export function App() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-background overflow-x-hidden">
@@ -674,18 +676,5 @@ function LandingPage() {
         <ScrollHint />
       </div>
     </LanguageProvider>
-  );
-}
-
-function ScrollHint() {
-  const { t } = useLanguage();
-  return (
-    <a
-      href="#tentang"
-      aria-label="Scroll down"
-      className="hidden md:flex fixed bottom-6 left-6 z-30 items-center gap-2 text-white/70 hover:text-white text-xs font-bold uppercase tracking-widest [writing-mode:vertical-rl] rotate-180"
-    >
-      <ArrowRight className="w-4 h-4" /> {t.hero.scroll}
-    </a>
   );
 }
