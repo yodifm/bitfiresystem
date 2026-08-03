@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
 use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 
@@ -9,10 +10,12 @@ class ProductCategorySeeder extends Seeder
 {
     public function run(): void
     {
+        $bitfireId = Brand::where('name', 'Bitfire')->value('id');
+
         $categories = [
             [
-                'key' => 'hydrant',
-                'label' => 'Fire Hydrant Equipment',
+                'key' => 'fire-hydrant-system',
+                'label' => 'Fire Hydrant System',
                 'image' => 'https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1000&q=80',
                 'items' => [
                     [
@@ -82,62 +85,7 @@ class ProductCategorySeeder extends Seeder
                 ],
             ],
             [
-                'key' => 'valves',
-                'label' => 'Fire Fighting Valves',
-                'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
-                'items' => [
-                    [
-                        'name' => 'Butterfly Valve',
-                        'icon' => 'Cog',
-                        'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
-                        'desc_id' => 'Wafer & lug type dengan tamper switch opsional.',
-                        'desc_en' => 'Wafer & lug type with optional tamper switch.',
-                        'desc_zh' => '对夹式与法兰式，可选防拆开关。',
-                    ],
-                    [
-                        'name' => 'Gate Valve OS&Y',
-                        'icon' => 'Wrench',
-                        'image' => 'https://images.unsplash.com/photo-1581094651181-35942459ef62?auto=format&fit=crop&w=1000&q=80',
-                        'desc_id' => 'Outside screw & yoke gate valve UL/FM.',
-                        'desc_en' => 'Outside screw & yoke gate valve, UL/FM listed.',
-                        'desc_zh' => '外螺纹轭式闸阀，UL/FM认证。',
-                    ],
-                    [
-                        'name' => 'Swing Check Valve',
-                        'icon' => 'GitBranch',
-                        'image' => 'https://images.unsplash.com/photo-1581093458791-9d2b9c9c9c5f?auto=format&fit=crop&w=1000&q=80',
-                        'desc_id' => 'Ductile iron body untuk sistem hydrant & sprinkler.',
-                        'desc_en' => 'Ductile iron body for hydrant & sprinkler systems.',
-                        'desc_zh' => '球墨铸铁材质，适用于消防栓及喷淋系统。',
-                    ],
-                    [
-                        'name' => 'Indicator Post',
-                        'icon' => 'Gauge',
-                        'image' => 'https://images.unsplash.com/photo-1581091870627-3b4a3b3c0a1a?auto=format&fit=crop&w=1000&q=80',
-                        'desc_id' => 'Wall & post indicator valve.',
-                        'desc_en' => 'Wall & post indicator valve.',
-                        'desc_zh' => '墙式及柱式指示阀。',
-                    ],
-                    [
-                        'name' => 'Wet Alarm Valve',
-                        'icon' => 'Bell',
-                        'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
-                        'desc_id' => 'Sistem sprinkler wet pipe dengan retarding chamber.',
-                        'desc_en' => 'Wet pipe sprinkler system with retarding chamber.',
-                        'desc_zh' => '带延时室的湿式喷淋系统。',
-                    ],
-                    [
-                        'name' => 'Deluge Alarm Valve',
-                        'icon' => 'ShieldAlert',
-                        'image' => 'https://images.unsplash.com/photo-1581094651181-35942459ef62?auto=format&fit=crop&w=1000&q=80',
-                        'desc_id' => 'Deluge system untuk area risiko tinggi.',
-                        'desc_en' => 'Deluge system for high-risk areas.',
-                        'desc_zh' => '适用于高风险区域的雨淋系统。',
-                    ],
-                ],
-            ],
-            [
-                'key' => 'alarm',
+                'key' => 'fire-alarm-system',
                 'label' => 'Fire Alarm System',
                 'image' => 'https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?auto=format&fit=crop&w=1000&q=80',
                 'items' => [
@@ -192,7 +140,7 @@ class ProductCategorySeeder extends Seeder
                 ],
             ],
             [
-                'key' => 'extinguisher',
+                'key' => 'fire-extinguisher',
                 'label' => 'Fire Extinguisher',
                 'image' => 'https://images.unsplash.com/photo-1618172193763-c511deb635ca?auto=format&fit=crop&w=1000&q=80',
                 'items' => [
@@ -246,6 +194,85 @@ class ProductCategorySeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'key' => 'fire-suppression-system',
+                'label' => 'Fire Suppression System',
+                'image' => 'https://images.unsplash.com/photo-1600881333168-2ef49b341f30?auto=format&fit=crop&w=1000&q=80',
+                'items' => [],
+            ],
+            [
+                'key' => 'fire-fighting-equipment',
+                'label' => 'Fire Fighting Equipment',
+                'image' => 'https://images.unsplash.com/photo-1581094651181-35942459ef62?auto=format&fit=crop&w=1000&q=80',
+                'items' => [],
+            ],
+            [
+                'key' => 'fire-hydrant-valves',
+                'label' => 'Fire Hydrant Valves',
+                'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
+                'items' => [
+                    [
+                        'name' => 'Butterfly Valve',
+                        'icon' => 'Cog',
+                        'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
+                        'desc_id' => 'Wafer & lug type dengan tamper switch opsional.',
+                        'desc_en' => 'Wafer & lug type with optional tamper switch.',
+                        'desc_zh' => '对夹式与法兰式，可选防拆开关。',
+                    ],
+                    [
+                        'name' => 'Gate Valve OS&Y',
+                        'icon' => 'Wrench',
+                        'image' => 'https://images.unsplash.com/photo-1581094651181-35942459ef62?auto=format&fit=crop&w=1000&q=80',
+                        'desc_id' => 'Outside screw & yoke gate valve UL/FM.',
+                        'desc_en' => 'Outside screw & yoke gate valve, UL/FM listed.',
+                        'desc_zh' => '外螺纹轭式闸阀，UL/FM认证。',
+                    ],
+                    [
+                        'name' => 'Swing Check Valve',
+                        'icon' => 'GitBranch',
+                        'image' => 'https://images.unsplash.com/photo-1581093458791-9d2b9c9c9c5f?auto=format&fit=crop&w=1000&q=80',
+                        'desc_id' => 'Ductile iron body untuk sistem hydrant & sprinkler.',
+                        'desc_en' => 'Ductile iron body for hydrant & sprinkler systems.',
+                        'desc_zh' => '球墨铸铁材质，适用于消防栓及喷淋系统。',
+                    ],
+                    [
+                        'name' => 'Indicator Post',
+                        'icon' => 'Gauge',
+                        'image' => 'https://images.unsplash.com/photo-1581091870627-3b4a3b3c0a1a?auto=format&fit=crop&w=1000&q=80',
+                        'desc_id' => 'Wall & post indicator valve.',
+                        'desc_en' => 'Wall & post indicator valve.',
+                        'desc_zh' => '墙式及柱式指示阀。',
+                    ],
+                    [
+                        'name' => 'Wet Alarm Valve',
+                        'icon' => 'Bell',
+                        'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
+                        'desc_id' => 'Sistem sprinkler wet pipe dengan retarding chamber.',
+                        'desc_en' => 'Wet pipe sprinkler system with retarding chamber.',
+                        'desc_zh' => '带延时室的湿式喷淋系统。',
+                    ],
+                    [
+                        'name' => 'Deluge Alarm Valve',
+                        'icon' => 'ShieldAlert',
+                        'image' => 'https://images.unsplash.com/photo-1581094651181-35942459ef62?auto=format&fit=crop&w=1000&q=80',
+                        'desc_id' => 'Deluge system untuk area risiko tinggi.',
+                        'desc_en' => 'Deluge system for high-risk areas.',
+                        'desc_zh' => '适用于高风险区域的雨淋系统。',
+                    ],
+                ],
+            ],
+            [
+                'key' => 'fire-and-safety-equipment',
+                'label' => 'Fire and Safety Equipment',
+                'image' => 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1000&q=80',
+                'items' => [],
+            ],
+            [
+                'key' => 'service-and-maintenance',
+                'label' => 'Service and Maintenance',
+                'image' => 'https://images.unsplash.com/photo-1516937941344-00b4e0337589?auto=format&fit=crop&w=1000&q=80',
+                'items' => [],
+            ],
         ];
 
         foreach ($categories as $catIndex => $categoryData) {
@@ -260,7 +287,7 @@ class ProductCategorySeeder extends Seeder
             foreach ($items as $itemIndex => $item) {
                 $category->items()->updateOrCreate(
                     ['name' => $item['name']],
-                    $item + ['sort_order' => $itemIndex],
+                    $item + ['sort_order' => $itemIndex, 'brand_id' => $bitfireId],
                 );
             }
         }

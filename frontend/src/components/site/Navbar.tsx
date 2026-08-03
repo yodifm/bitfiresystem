@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
-import { Flame, Menu, X, Languages } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useLanguage, type Lang } from "./language";
+import logo from "@/assets/Logo/logo.png";
+import flagId from "flag-icons/flags/4x3/id.svg";
+import flagGb from "flag-icons/flags/4x3/gb.svg";
+import flagCn from "flag-icons/flags/4x3/cn.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,11 +12,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const langOptions: { value: Lang; label: string }[] = [
-  { value: "id", label: "Indonesia" },
-  { value: "en", label: "English" },
-  { value: "zh", label: "中文" },
+const flagByCode: Record<string, string> = { id: flagId, gb: flagGb, cn: flagCn };
+
+const langOptions: { value: Lang; label: string; flagCode: string }[] = [
+  { value: "id", label: "Indonesia", flagCode: "id" },
+  { value: "en", label: "English", flagCode: "gb" },
+  { value: "zh", label: "中文", flagCode: "cn" },
 ];
+
+function FlagIcon({ code, className = "" }: { code: string; className?: string }) {
+  return (
+    <img
+      src={flagByCode[code]}
+      alt=""
+      className={`inline-block w-5 h-auto rounded-sm ${className}`}
+    />
+  );
+}
+
+function langFlagCode(lang: Lang) {
+  return langOptions.find((o) => o.value === lang)?.flagCode ?? "id";
+}
 
 function langCode(lang: Lang) {
   return lang === "id" ? "ID" : lang === "en" ? "EN" : "中文";
@@ -46,17 +66,9 @@ export function Navbar() {
       }`}
     >
       <div className="container-page flex items-center justify-between h-16 md:h-20">
-        <a href="#home" className="flex items-center gap-2 group">
-          <span className="grid place-items-center w-10 h-10 rounded-md bg-brand text-brand-foreground shadow-elegant">
-            <Flame className="w-6 h-6" strokeWidth={2.4} />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-display font-black text-lg md:text-xl text-white tracking-wide">
-              BitFire<span className="text-brand">Systems</span>
-            </span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-white/60">
-              International
-            </span>
+        <a href="#home" className="flex items-center group">
+          <span className="inline-flex items-center bg-white rounded-md px-3 py-1.5 shadow-elegant">
+            <img src={logo} alt="BitFire System International" className="h-8 md:h-10 w-auto" />
           </span>
         </a>
 
@@ -76,7 +88,7 @@ export function Navbar() {
                 aria-label="Change language"
                 className="inline-flex items-center gap-1.5 rounded-md border border-white/25 text-white/85 hover:text-white hover:border-white/50 px-3 py-2 text-xs font-bold uppercase tracking-wider transition"
               >
-                <Languages className="w-4 h-4" />
+                <FlagIcon code={langFlagCode(lang)} />
                 {langCode(lang)}
               </button>
             </DropdownMenuTrigger>
@@ -85,8 +97,9 @@ export function Navbar() {
                 <DropdownMenuItem
                   key={opt.value}
                   onClick={() => setLang(opt.value)}
-                  className={lang === opt.value ? "font-bold text-brand" : ""}
+                  className={`gap-2 ${lang === opt.value ? "font-bold text-brand" : ""}`}
                 >
+                  <FlagIcon code={opt.flagCode} />
                   {opt.label}
                 </DropdownMenuItem>
               ))}
@@ -107,7 +120,7 @@ export function Navbar() {
                 aria-label="Change language"
                 className="inline-flex items-center gap-1 text-white/85 px-2 py-2 text-xs font-bold uppercase tracking-wider"
               >
-                <Languages className="w-4 h-4" />
+                <FlagIcon code={langFlagCode(lang)} />
                 {langCode(lang)}
               </button>
             </DropdownMenuTrigger>
@@ -116,8 +129,9 @@ export function Navbar() {
                 <DropdownMenuItem
                   key={opt.value}
                   onClick={() => setLang(opt.value)}
-                  className={lang === opt.value ? "font-bold text-brand" : ""}
+                  className={`gap-2 ${lang === opt.value ? "font-bold text-brand" : ""}`}
                 >
+                  <FlagIcon code={opt.flagCode} />
                   {opt.label}
                 </DropdownMenuItem>
               ))}

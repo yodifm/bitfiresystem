@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Certification extends Model
+class LegalDocument extends Model
 {
     protected $fillable = [
-        'icon',
-        'label_id',
-        'label_en',
-        'label_zh',
+        'title_id',
+        'title_en',
+        'title_zh',
+        'file',
         'sort_order',
     ];
 }

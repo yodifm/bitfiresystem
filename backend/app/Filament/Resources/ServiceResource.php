@@ -37,6 +37,11 @@ class ServiceResource extends Resource
                     ->helperText('Nama komponen icon dari lucide-react, contoh: Factory, Zap, Building2')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\FileUpload::make('image')
+                    ->label('Foto')
+                    ->image()
+                    ->directory('services')
+                    ->required(),
                 Forms\Components\Textarea::make('desc_id')
                     ->label('Deskripsi (Bahasa Indonesia)')
                     ->required()
@@ -63,6 +68,8 @@ class ServiceResource extends Resource
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Foto'),
                 Tables\Columns\TextColumn::make('icon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')

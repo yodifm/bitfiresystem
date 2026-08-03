@@ -12,8 +12,12 @@ import {
   ArrowRight,
   ZoomIn,
   Flame,
+  FileText,
+  Download,
 } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
+import logo from "@/assets/Logo/logo.png";
+import aboutImage from "@/assets/Image/About.jpg";
 import { HeroCarousel } from "@/components/site/HeroCarousel";
 import { StatsSection } from "@/components/site/StatsSection";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
@@ -23,9 +27,11 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import {
   getServices,
   getProductCategories,
+  getBrands,
   getGallery,
   getValueProps,
-  getCertifications,
+  getLegalDocuments,
+  getCatalogs,
   postContactMessage,
 } from "@/lib/api";
 import { getIcon } from "@/lib/icons";
@@ -86,9 +92,9 @@ function AboutSection() {
             <div className="absolute -top-4 -left-4 w-24 h-24 border-4 border-brand hidden md:block" />
             <div className="absolute -bottom-4 -right-4 w-24 h-24 border-4 border-navy hidden md:block" />
             <img
-              src="https://images.unsplash.com/photo-1523419409543-8c1a1e5a4b7c?auto=format&fit=crop&w=1000&q=80"
+              src={aboutImage}
               alt="Fire safety team"
-              className="relative w-full h-[440px] object-cover rounded-md shadow-elegant"
+              className="relative w-full h-[500px] md:h-[620px] object-cover object-top rounded-md shadow-elegant"
               loading="lazy"
             />
             <div className="absolute bottom-6 left-6 right-6 bg-navy/95 backdrop-blur text-white p-5 rounded-md shadow-card">
@@ -106,7 +112,14 @@ function AboutSection() {
         </Reveal>
 
         <Reveal delay={100}>
-          <SectionTitle eyebrow={t.about.eyebrow} title={t.about.title} desc={t.about.desc} />
+          <SectionTitle eyebrow={t.about.eyebrow} title={t.about.title} />
+          <div className="space-y-3 mb-6">
+            {t.about.paragraphs.map((p) => (
+              <p key={p} className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
           <div className="space-y-5">
             <div className="flex gap-4 p-5 rounded-lg border border-border bg-card shadow-card">
               <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand">
@@ -166,17 +179,25 @@ function ServicesSection() {
             const Icon = getIcon(s.icon);
             return (
               <Reveal key={s.title} delay={idx * 60}>
-                <div className="group relative h-full p-6 rounded-lg bg-white/5 border border-white/10 hover:border-brand hover:bg-white/[0.08] transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant overflow-hidden">
-                  <div className="absolute top-0 left-0 w-0 h-1 bg-brand group-hover:w-full transition-all duration-500" />
-                  <div className="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-brand/0 group-hover:bg-brand/10 blur-2xl transition-all duration-500" />
-                  <div className="relative">
-                    <div className="grid place-items-center w-14 h-14 rounded-md bg-brand text-brand-foreground mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                      <Icon className="w-7 h-7" />
-                    </div>
-                    <h4 className="font-display font-bold text-white text-lg uppercase leading-tight">
+                <div className="group relative aspect-[4/5] rounded-lg overflow-hidden shadow-elegant hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+                  <img
+                    src={s.image}
+                    alt={s.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/55 to-navy/10 group-hover:from-navy group-hover:via-navy/80 transition-colors duration-500" />
+                  <div className="absolute inset-0 border border-white/10 group-hover:border-brand/60 rounded-lg transition-colors duration-500" />
+                  <div className="absolute top-3 left-3 grid place-items-center w-11 h-11 rounded-md bg-brand text-brand-foreground shadow-elegant group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h4 className="font-display font-bold text-white text-base md:text-lg uppercase leading-tight">
                       {s.title}
                     </h4>
-                    <p className="mt-2 text-sm text-white/65 leading-relaxed">{s.desc[lang]}</p>
+                    <p className="mt-1.5 text-xs text-white/75 leading-relaxed max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-300 overflow-hidden">
+                      {s.desc[lang]}
+                    </p>
                   </div>
                 </div>
               </Reveal>
@@ -194,9 +215,12 @@ function ProductsSection() {
     queryKey: ["product-categories"],
     queryFn: getProductCategories,
   });
+  const { data: brands } = useQuery({ queryKey: ["brands"], queryFn: getBrands });
   const [active, setActive] = useState<string | null>(null);
+  const [activeBrand, setActiveBrand] = useState<string | null>(null);
   const [selected, setSelected] = useState<ProductItem | null>(null);
   const current = productTabs?.find((tab) => tab.key === (active ?? productTabs?.[0]?.key));
+  const filteredItems = current?.items.filter((item) => !activeBrand || item.brand === activeBrand);
 
   return (
     <section id="produk" className="py-20 md:py-28 bg-background">
@@ -211,7 +235,7 @@ function ProductsSection() {
         </Reveal>
 
         <Reveal>
-          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
             {productTabs?.map((tab) => (
               <button
                 key={tab.key}
@@ -227,6 +251,36 @@ function ProductsSection() {
             ))}
           </div>
         </Reveal>
+
+        {!!brands?.length && (
+          <Reveal>
+            <div className="flex flex-wrap justify-center items-center gap-2 mb-10 pb-8 border-b border-border">
+              <button
+                onClick={() => setActiveBrand(null)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border transition ${
+                  activeBrand === null
+                    ? "bg-navy text-white border-navy"
+                    : "border-border text-muted-foreground hover:border-navy hover:text-navy"
+                }`}
+              >
+                {t.products.allBrands}
+              </button>
+              {brands.map((b) => (
+                <button
+                  key={b.name}
+                  onClick={() => setActiveBrand(b.name)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border transition ${
+                    activeBrand === b.name
+                      ? "bg-navy text-white border-navy"
+                      : "border-border text-muted-foreground hover:border-navy hover:text-navy"
+                  }`}
+                >
+                  {b.name}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+        )}
 
         {current && (
           <div className="grid lg:grid-cols-3 gap-8">
@@ -250,34 +304,51 @@ function ProductsSection() {
               </div>
             </Reveal>
 
-            <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
-              {current.items.map((item, i) => {
-                const Icon = getIcon(item.icon);
-                return (
-                  <Reveal key={item.name} delay={i * 50}>
-                    <button
-                      type="button"
-                      onClick={() => setSelected(item)}
-                      className="w-full h-full text-left p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer relative overflow-hidden"
-                    >
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 rounded-bl-full group-hover:bg-brand/10 transition" />
-                      <div className="relative flex items-start gap-4">
-                        <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
-                          <Icon className="w-6 h-6" strokeWidth={2} />
+            <div className="lg:col-span-2">
+              {filteredItems && filteredItems.length > 0 ? (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {filteredItems.map((item, i) => {
+                    const Icon = getIcon(item.icon);
+                    return (
+                      <Reveal key={item.name} delay={i * 50}>
+                        <div className="w-full h-full flex flex-col p-5 rounded-lg border border-border bg-card hover:border-brand hover:shadow-elegant hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden">
+                          <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 rounded-bl-full group-hover:bg-brand/10 transition" />
+                          <div className="relative flex items-start gap-4 flex-1">
+                            <div className="shrink-0 grid place-items-center w-12 h-12 rounded-md bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
+                              <Icon className="w-6 h-6" strokeWidth={2} />
+                            </div>
+                            <div className="min-w-0">
+                              {item.brand && (
+                                <p className="text-[11px] font-bold uppercase tracking-wider text-brand mb-0.5">
+                                  {item.brand}
+                                </p>
+                              )}
+                              <h4 className="font-display font-bold text-navy uppercase text-base leading-tight group-hover:text-brand transition">
+                                {item.name}
+                              </h4>
+                              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                                {item.desc[lang]}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setSelected(item)}
+                            className="relative mt-4 inline-flex self-start items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand hover:text-brand-dark transition"
+                          >
+                            {t.products.detail}
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
                         </div>
-                        <div className="min-w-0">
-                          <h4 className="font-display font-bold text-navy uppercase text-base leading-tight group-hover:text-brand transition">
-                            {item.name}
-                          </h4>
-                          <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-                            {item.desc[lang]}
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                  </Reveal>
-                );
-              })}
+                      </Reveal>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="h-full min-h-[200px] grid place-items-center rounded-lg border border-dashed border-border p-8 text-center">
+                  <p className="text-sm text-muted-foreground">{t.products.emptyItems}</p>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -294,17 +365,94 @@ function ProductsSection() {
                 loading="lazy"
               />
               <div className="p-6">
+                {selected.brand && (
+                  <p className="text-xs font-bold uppercase tracking-wider text-brand mb-1">
+                    {selected.brand}
+                  </p>
+                )}
                 <DialogTitle className="font-display font-black uppercase text-navy text-xl">
                   {selected.name}
                 </DialogTitle>
                 <DialogDescription className="mt-2 text-sm leading-relaxed">
                   {selected.desc[lang]}
                 </DialogDescription>
+                <a
+                  href={`https://wa.me/6281380140997?text=${encodeURIComponent(
+                    `Halo BitFire System International, saya ingin bertanya mengenai produk:\n\n${selected.name}${selected.brand ? ` (${selected.brand})` : ""}`,
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex items-center gap-2 rounded-md bg-brand hover:bg-brand-dark text-brand-foreground px-5 py-3 font-bold uppercase tracking-wider text-sm shadow-elegant transition"
+                >
+                  {t.products.orderNow}
+                </a>
               </div>
             </>
           )}
         </DialogContent>
       </Dialog>
+    </section>
+  );
+}
+
+function CatalogSection() {
+  const { t, lang } = useLanguage();
+  const { data: catalogs } = useQuery({ queryKey: ["catalogs"], queryFn: getCatalogs });
+
+  if (!catalogs?.length) return null;
+
+  return (
+    <section className="relative py-20 md:py-28 bg-navy overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:32px_32px]" />
+      <div className="container-page relative">
+        <Reveal>
+          <SectionTitle
+            center
+            invert
+            eyebrow={t.catalog.eyebrow}
+            title={t.catalog.title}
+            desc={t.catalog.desc}
+          />
+        </Reveal>
+
+        <div className="grid sm:grid-cols-2 max-w-2xl mx-auto gap-6">
+          {catalogs.map((c, i) => (
+            <Reveal key={c.file} delay={i * 80}>
+              <a
+                href={c.file}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col h-full rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-brand hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 shadow-elegant"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
+                  {c.cover ? (
+                    <img
+                      src={c.cover}
+                      alt={c.title[lang]}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full grid place-items-center">
+                      <FileText className="w-16 h-16 text-white/20" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/10 to-transparent" />
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <h4 className="font-display font-bold text-white uppercase text-lg leading-tight">
+                    {c.title[lang]}
+                  </h4>
+                  <span className="mt-4 inline-flex items-center gap-2 self-start rounded-md bg-brand group-hover:bg-brand-dark text-brand-foreground px-4 py-2.5 font-bold uppercase tracking-wider text-xs shadow-elegant transition">
+                    <Download className="w-4 h-4" />
+                    {t.catalog.download}
+                  </span>
+                </div>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
@@ -374,11 +522,10 @@ function GallerySection() {
 }
 
 function CertificationSection() {
-  const { t } = useLanguage();
-  const { lang } = useLanguage();
-  const { data: certifications } = useQuery({
-    queryKey: ["certifications"],
-    queryFn: getCertifications,
+  const { t, lang } = useLanguage();
+  const { data: legalDocuments } = useQuery({
+    queryKey: ["legal-documents"],
+    queryFn: getLegalDocuments,
   });
 
   return (
@@ -393,24 +540,32 @@ function CertificationSection() {
             desc={t.certification.desc}
           />
         </Reveal>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {certifications?.map((b, i) => {
-            const Icon = getIcon(b.icon);
-            return (
-              <Reveal key={b.label.id} delay={i * 60}>
-                <div className="group relative h-full flex flex-col items-center justify-center gap-3 p-6 rounded-lg bg-white border border-border hover:border-brand hover:-translate-y-1 hover:shadow-elegant transition-all duration-300 shadow-card overflow-hidden">
-                  <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand/0 via-brand to-brand/0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="grid place-items-center w-16 h-16 rounded-full bg-gradient-to-br from-brand/10 to-brand/5 text-brand group-hover:from-brand group-hover:to-brand-dark group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
-                    <Icon className="w-8 h-8" />
+
+        {!!legalDocuments?.length && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {legalDocuments.map((doc, i) => (
+              <Reveal key={doc.file} delay={i * 60}>
+                <a
+                  href={doc.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative h-full flex flex-col items-center justify-center gap-2.5 p-5 rounded-lg bg-white border border-border hover:border-brand hover:-translate-y-1 hover:shadow-elegant transition-all duration-300 shadow-card text-center"
+                >
+                  <div className="grid place-items-center w-14 h-14 rounded-full bg-gradient-to-br from-brand/10 to-brand/5 text-brand group-hover:from-brand group-hover:to-brand-dark group-hover:text-brand-foreground group-hover:scale-110 transition-all duration-300">
+                    <FileText className="w-7 h-7" />
                   </div>
-                  <p className="text-xs md:text-sm font-bold text-navy text-center uppercase tracking-wide">
-                    {b.label[lang]}
+                  <p className="text-xs font-bold text-navy uppercase tracking-wide leading-tight">
+                    {doc.title[lang]}
                   </p>
-                </div>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-brand uppercase tracking-wider">
+                    {t.certification.viewDocument}
+                    <ArrowRight className="w-3 h-3" />
+                  </span>
+                </a>
               </Reveal>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -469,7 +624,7 @@ function ContactSection() {
     });
 
     const lines = [
-      "Halo BitFire Systems, saya ingin bertanya:",
+      "Halo BitFire System International, saya ingin bertanya:",
       "",
       `Nama: ${name}`,
       `Email: ${email}`,
@@ -645,15 +800,10 @@ function Footer() {
     <footer className="bg-[#08101f] text-white/70 py-10 border-t border-white/10">
       <div className="container-page grid md:grid-cols-3 gap-8 items-center">
         <div className="flex items-center gap-3">
-          <span className="grid place-items-center w-10 h-10 rounded-md bg-brand text-brand-foreground">
-            <Flame className="w-5 h-5" />
+          <span className="inline-flex items-center bg-white rounded-md px-3 py-1.5">
+            <img src={logo} alt="BitFire System International" className="h-9 w-auto" />
           </span>
-          <div>
-            <p className="font-display font-black text-white text-lg leading-none">
-              BitFire<span className="text-brand">Systems</span>
-            </p>
-            <p className="text-xs text-white/50 mt-0.5">PT. BitFire System International</p>
-          </div>
+          <p className="text-xs text-white/50">PT. BitFire System International</p>
         </div>
         <p className="text-sm md:text-center font-semibold text-white/80 italic">
           {t.footer.tagline}
@@ -690,6 +840,7 @@ export function App() {
           <StatsSection />
           <ServicesSection />
           <ProductsSection />
+          <CatalogSection />
           <GallerySection />
           <CertificationSection />
           <WhyUsSection />

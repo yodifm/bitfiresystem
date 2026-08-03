@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ProductCategoryResource\RelationManagers;
 
+use App\Models\Brand;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -27,6 +28,18 @@ class ItemsRelationManager extends RelationManager
                     ->helperText('Contoh: Droplets, Wrench, Bell')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('brand_id')
+                    ->label('Merk')
+                    ->options(fn () => Brand::orderBy('sort_order')->pluck('name', 'id'))
+                    ->searchable()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nama Merk')
+                            ->required()
+                            ->unique('brands', 'name'),
+                    ])
+                    ->createOptionUsing(fn (array $data) => Brand::create($data)->id)
+                    ->native(false),
                 Forms\Components\FileUpload::make('image')
                     ->label('Foto Produk')
                     ->image()
@@ -63,6 +76,8 @@ class ItemsRelationManager extends RelationManager
                     ->label('Foto'),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Produk'),
+                Tables\Columns\TextColumn::make('brand.name')
+                    ->label('Merk'),
                 Tables\Columns\TextColumn::make('icon')
                     ->label('Icon'),
                 Tables\Columns\TextColumn::make('sort_order')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,6 +12,7 @@ class ServiceResource extends JsonResource
     {
         return [
             'icon' => $this->icon,
+            'image' => Media::url($this->image),
             'title' => $this->title,
             'desc' => [
                 'id' => $this->desc_id,

@@ -26,6 +26,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('BitFire System')
+            ->favicon(asset('images/favicon.png'))
             ->login()
             ->colors([
                 'primary' => Color::Amber,

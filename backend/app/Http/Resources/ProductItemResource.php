@@ -19,6 +19,7 @@ class ProductItemResource extends JsonResource
             ],
             'icon' => $this->icon,
             'image' => Media::url($this->image),
+            'brand' => $this->whenLoaded('brand', fn () => $this->brand?->name),
         ];
     }
 }

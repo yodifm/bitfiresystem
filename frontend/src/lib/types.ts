@@ -2,6 +2,7 @@ export type Localized = { id: string; en: string; zh: string };
 
 export type Service = {
   icon: string;
+  image: string;
   title: string;
   desc: Localized;
 };
@@ -11,6 +12,7 @@ export type ProductItem = {
   desc: Localized;
   icon: string;
   image: string;
+  brand: string | null;
 };
 
 export type ProductCategory = {
@@ -18,6 +20,10 @@ export type ProductCategory = {
   label: string;
   image: string;
   items: ProductItem[];
+};
+
+export type Brand = {
+  name: string;
 };
 
 export type GalleryItem = {
@@ -36,7 +42,13 @@ export type ValueProp = {
   desc: Localized;
 };
 
-export type Certification = {
-  icon: string;
-  label: Localized;
+export type LegalDocument = {
+  title: Localized;
+  file: string;
+};
+
+export type Catalog = {
+  title: Localized;
+  cover: string | null;
+  file: string;
 };

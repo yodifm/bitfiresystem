@@ -1,6 +1,8 @@
 import type {
-  Certification,
+  Brand,
+  Catalog,
   GalleryItem,
+  LegalDocument,
   ProductCategory,
   Service,
   Stat,
@@ -18,10 +20,12 @@ async function getJson<T>(path: string): Promise<T> {
 
 export const getServices = () => getJson<Service[]>("/api/services");
 export const getProductCategories = () => getJson<ProductCategory[]>("/api/product-categories");
+export const getBrands = () => getJson<Brand[]>("/api/brands");
 export const getGallery = () => getJson<GalleryItem[]>("/api/gallery");
 export const getStats = () => getJson<Stat[]>("/api/stats");
 export const getValueProps = () => getJson<ValueProp[]>("/api/value-props");
-export const getCertifications = () => getJson<Certification[]>("/api/certifications");
+export const getLegalDocuments = () => getJson<LegalDocument[]>("/api/legal-documents");
+export const getCatalogs = () => getJson<Catalog[]>("/api/catalogs");
 
 export type ContactMessagePayload = {
   name: string;

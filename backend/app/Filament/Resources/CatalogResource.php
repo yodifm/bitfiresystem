@@ -2,48 +2,52 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CertificationResource\Pages;
-use App\Filament\Resources\CertificationResource\RelationManagers;
-use App\Models\Certification;
+use App\Filament\Resources\CatalogResource\Pages;
+use App\Models\Catalog;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CertificationResource extends Resource
+class CatalogResource extends Resource
 {
-    protected static ?string $model = Certification::class;
+    protected static ?string $model = Catalog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     protected static ?string $navigationGroup = 'Konten Website';
 
-    protected static ?string $navigationLabel = 'Sertifikasi';
+    protected static ?string $navigationLabel = 'Katalog Produk';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('icon')
-                    ->label('Nama Icon (Lucide)')
-                    ->helperText('Contoh: BadgeCheck, Award, ShieldCheck')
+                Forms\Components\TextInput::make('title_id')
+                    ->label('Judul (Bahasa Indonesia)')
+                    ->helperText('Contoh: Katalog Produk Fire Hydrant')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('label_id')
-                    ->label('Label (Bahasa Indonesia)')
+                Forms\Components\TextInput::make('title_en')
+                    ->label('Judul (English)')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('label_en')
-                    ->label('Label (English)')
+                Forms\Components\TextInput::make('title_zh')
+                    ->label('Judul (中文)')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('label_zh')
-                    ->label('Label (中文)')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\FileUpload::make('cover')
+                    ->label('Cover (opsional)')
+                    ->directory('catalogs/covers')
+                    ->image(),
+                Forms\Components\FileUpload::make('file')
+                    ->label('File PDF')
+                    ->directory('catalogs')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->openable()
+                    ->downloadable()
+                    ->required(),
                 Forms\Components\TextInput::make('sort_order')
                     ->label('Urutan Tampil')
                     ->required()
@@ -58,10 +62,10 @@ class CertificationResource extends Resource
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->columns([
-                Tables\Columns\TextColumn::make('icon')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('label_id')
-                    ->label('Label (ID)')
+                Tables\Columns\ImageColumn::make('cover')
+                    ->label('Cover'),
+                Tables\Columns\TextColumn::make('title_id')
+                    ->label('Judul (ID)')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sort_order')
                     ->numeric()
@@ -91,9 +95,9 @@ class CertificationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCertifications::route('/'),
-            'create' => Pages\CreateCertification::route('/create'),
-            'edit' => Pages\EditCertification::route('/{record}/edit'),
+            'index' => Pages\ListCatalogs::route('/'),
+            'create' => Pages\CreateCatalog::route('/create'),
+            'edit' => Pages\EditCatalog::route('/{record}/edit'),
         ];
     }
 }

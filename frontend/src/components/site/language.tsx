@@ -21,7 +21,7 @@ export type UiText = {
   about: {
     eyebrow: string;
     title: string;
-    desc: string;
+    paragraphs: string[];
     experience: string;
     experienceLabel: string;
     visiTitle: string;
@@ -30,9 +30,25 @@ export type UiText = {
     misiItems: string[];
   };
   services: { eyebrow: string; title: string; desc: string };
-  products: { eyebrow: string; title: string; desc: string; kategori: string };
+  products: {
+    eyebrow: string;
+    title: string;
+    desc: string;
+    kategori: string;
+    allBrands: string;
+    emptyItems: string;
+    detail: string;
+    orderNow: string;
+  };
   gallery: { eyebrow: string; title: string; desc: string };
-  certification: { eyebrow: string; title: string; desc: string };
+  catalog: { eyebrow: string; title: string; desc: string; download: string };
+  certification: {
+    eyebrow: string;
+    title: string;
+    desc: string;
+    legalTitle: string;
+    viewDocument: string;
+  };
   whyUs: { eyebrow: string; title: string };
   contact: {
     eyebrow: string;
@@ -87,9 +103,9 @@ const uiText: Record<Lang, UiText> = {
           desc: "Dipercaya melindungi fasilitas migas, pembangkit listrik, hotel, rumah sakit, dan bangunan tinggi berisiko tinggi.",
         },
         {
-          eyebrow: "Produk Bersertifikat · SNI · UL · FM",
-          title: "Fire Hydrant, Fire Alarm &",
-          highlight: "Fire Fighting Equipment",
+          eyebrow: "Produk Berkualitas",
+          title: "Peralatan Keselamatan Kebakaran &",
+          highlight: "Supplier Mekanikal Elektrikal",
           desc: "Produk lengkap bersertifikat standar nasional dan internasional untuk keandalan proteksi kebakaran.",
         },
         {
@@ -103,7 +119,11 @@ const uiText: Record<Lang, UiText> = {
     about: {
       eyebrow: "Tentang Kami",
       title: "Total Fire Safety Provider Terpercaya",
-      desc: "PT. BitFire System International adalah penyedia solusi fire safety terintegrasi. Kami berpengalaman di bidang engineering, product testing, personnel development, dan training untuk memastikan setiap sistem proteksi kebakaran bekerja optimal.",
+      paragraphs: [
+        "Kami adalah BitFire System International, Total Fire Safety Provider yang menghadirkan solusi proteksi kebakaran terintegrasi paling lengkap dan fleksibel di pasar saat ini.",
+        "Dengan kekayaan sumber daya dan keahlian kami, kami mengandalkan pengalaman di bidang engineering, product testing, pengembangan personel, dan training untuk memberikan cakupan layanan yang menyeluruh bagi klien serta memenuhi kebutuhan keamanan yang terus berkembang.",
+        "Kami berkomitmen melayani bangsa dengan menyelamatkan jiwa dan harta benda, serta menjadi pemimpin pasar di Indonesia dengan memenangkan kepercayaan pelanggan, memperluas basis klien, dan menjaga hubungan bisnis jangka panjang melalui peningkatan layanan dan kepuasan pelanggan secara berkelanjutan.",
+      ],
       experience: "10+ Tahun",
       experienceLabel: "Pengalaman Industri",
       visiTitle: "Visi",
@@ -125,6 +145,16 @@ const uiText: Record<Lang, UiText> = {
       title: "Fire Safety Equipment Lengkap",
       desc: "Rangkaian produk fire protection bersertifikat untuk kebutuhan proyek Anda. Klik salah satu produk untuk melihat fotonya.",
       kategori: "Kategori",
+      allBrands: "Semua Merk",
+      emptyItems: "Belum ada produk di kategori ini untuk merk yang dipilih.",
+      detail: "Lihat Detail",
+      orderNow: "Pesan Sekarang",
+    },
+    catalog: {
+      eyebrow: "Katalog Produk",
+      title: "Unduh Katalog Kami",
+      desc: "Lihat rangkaian lengkap produk fire safety kami dalam format PDF yang mudah dibagikan.",
+      download: "Unduh Katalog",
     },
     gallery: {
       eyebrow: "Galeri",
@@ -133,8 +163,10 @@ const uiText: Record<Lang, UiText> = {
     },
     certification: {
       eyebrow: "Sertifikasi & Legalitas",
-      title: "Standar Nasional & Internasional",
+      title: "Dokumen Legalitas",
       desc: "Perusahaan resmi berbadan hukum dan produk-produk bersertifikat standar terpercaya.",
+      legalTitle: "Unduh Dokumen Resmi",
+      viewDocument: "Lihat Dokumen",
     },
     whyUs: {
       eyebrow: "Kenapa Memilih Kami",
@@ -194,9 +226,9 @@ const uiText: Record<Lang, UiText> = {
           desc: "Trusted to protect oil & gas facilities, power plants, hotels, hospitals, and high-risk tall buildings.",
         },
         {
-          eyebrow: "Certified Equipment · SNI · UL · FM",
-          title: "Fire Hydrant, Fire Alarm &",
-          highlight: "Fire Fighting Equipment",
+          eyebrow: "Premium Quality Equipment",
+          title: "Fire Safety Equipment and",
+          highlight: "Mechanical Electrical Supplier",
           desc: "A complete range of nationally and internationally certified products for reliable fire protection.",
         },
         {
@@ -210,7 +242,11 @@ const uiText: Record<Lang, UiText> = {
     about: {
       eyebrow: "About Us",
       title: "A Trusted Total Fire Safety Provider",
-      desc: "PT. BitFire System International is an integrated fire safety solutions provider. We are experienced in engineering, product testing, personnel development, and training to ensure every fire protection system performs optimally.",
+      paragraphs: [
+        "We are BitFire System International, a Total Fire Safety Provider delivering some of the most comprehensive and flexible integrated fire safety solutions in the market today.",
+        "With our wealth of resources and expertise, we draw on our experience in engineering, product testing, personnel development, and training to provide seamless coverage for our clients and meet today's ever-changing security demands.",
+        "We are committed to serving the nation by saving life and property, and to emerge as a market leader in Indonesia by winning our customers' confidence, expanding our client base, and maintaining long-lasting business relationships through continual improvement of our service and customer satisfaction.",
+      ],
       experience: "10+ Years",
       experienceLabel: "Industry Experience",
       visiTitle: "Vision",
@@ -232,6 +268,16 @@ const uiText: Record<Lang, UiText> = {
       title: "Complete Fire Safety Equipment",
       desc: "A range of certified fire protection products for your project needs. Click a product to view its photo.",
       kategori: "Category",
+      allBrands: "All Brands",
+      emptyItems: "No products yet in this category for the selected brand.",
+      detail: "View Detail",
+      orderNow: "Order Now",
+    },
+    catalog: {
+      eyebrow: "Product Catalog",
+      title: "Download Our Catalog",
+      desc: "Browse our complete range of fire safety products in an easy-to-share PDF format.",
+      download: "Download Catalog",
     },
     gallery: {
       eyebrow: "Gallery",
@@ -240,8 +286,10 @@ const uiText: Record<Lang, UiText> = {
     },
     certification: {
       eyebrow: "Certification & Legality",
-      title: "National & International Standards",
+      title: "Legal Documents",
       desc: "An officially licensed company with products certified to trusted standards.",
+      legalTitle: "Download Official Documents",
+      viewDocument: "View Document",
     },
     whyUs: {
       eyebrow: "Why Choose Us",
@@ -301,9 +349,9 @@ const uiText: Record<Lang, UiText> = {
           desc: "值得信赖地保护石油天然气设施、发电厂、酒店、医院及高风险高层建筑。",
         },
         {
-          eyebrow: "认证产品 · SNI · UL · FM",
-          title: "消防栓、火灾报警系统与",
-          highlight: "消防设备",
+          eyebrow: "优质产品",
+          title: "消防安全设备与",
+          highlight: "机电设备供应商",
           desc: "提供符合国家及国际标准认证的完整产品系列，确保消防安全可靠。",
         },
         {
@@ -317,7 +365,11 @@ const uiText: Record<Lang, UiText> = {
     about: {
       eyebrow: "关于我们",
       title: "值得信赖的全面消防安全服务商",
-      desc: "PT. BitFire System International 是一家提供一体化消防安全解决方案的公司。我们在工程设计、产品测试、人才培养和培训方面拥有丰富经验，确保每一套消防系统都能发挥最佳性能。",
+      paragraphs: [
+        "我们是BitFire System International，作为全方位消防安全服务商，为当今市场提供最全面、最灵活的整合消防安全解决方案。",
+        "凭借丰富的资源与专业能力，我们运用在工程设计、产品测试、人员培养与培训方面的经验，为客户提供无缝的服务保障，满足不断变化的安全需求。",
+        "我们致力于通过保护生命与财产来服务国家，并通过赢得客户信任、拓展客户群体，以及持续改进服务与客户满意度来维持长久的业务关系，从而成为印尼市场的领导者。",
+      ],
       experience: "10+ 年",
       experienceLabel: "行业经验",
       visiTitle: "愿景",
@@ -339,6 +391,16 @@ const uiText: Record<Lang, UiText> = {
       title: "完整的消防安全设备",
       desc: "一系列经过认证的消防产品，满足您的项目需求。点击产品即可查看照片。",
       kategori: "类别",
+      allBrands: "所有品牌",
+      emptyItems: "该类别暂无符合所选品牌的产品。",
+      detail: "查看详情",
+      orderNow: "立即订购",
+    },
+    catalog: {
+      eyebrow: "产品目录",
+      title: "下载我们的产品目录",
+      desc: "以便于分享的 PDF 格式浏览我们完整的消防安全产品系列。",
+      download: "下载目录",
     },
     gallery: {
       eyebrow: "相册",
@@ -347,8 +409,10 @@ const uiText: Record<Lang, UiText> = {
     },
     certification: {
       eyebrow: "认证与合法性",
-      title: "国家及国际标准",
+      title: "法律文件",
       desc: "正规注册公司，产品均通过可信标准认证。",
+      legalTitle: "下载官方文件",
+      viewDocument: "查看文件",
     },
     whyUs: {
       eyebrow: "为何选择我们",

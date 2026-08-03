@@ -62,7 +62,7 @@ export function StatsSection() {
                 <div className="font-display font-black text-5xl md:text-6xl lg:text-7xl text-white leading-none">
                   <Counter end={s.value} suffix={s.suffix} />
                 </div>
-                <div className="mt-3 text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/70">
+                <div className="mt-3 text-[11px] md:text-xs font-bold uppercase tracking-[0.12em] text-white/70 whitespace-nowrap">
                   {s.label[lang]}
                 </div>
               </div>

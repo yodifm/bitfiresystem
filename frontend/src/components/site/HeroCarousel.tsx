@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ShieldCheck, Phone } from "lucide-react";
 import { useLanguage } from "./language";
+import banner1 from "@/assets/Image/banner/banner 3.jpg";
+import banner2 from "@/assets/Image/banner/banner 1.jpg";
+import banner3 from "@/assets/Image/banner/banner 4.jpg";
+import banner4 from "@/assets/Image/banner/banner 2.jpg";
 
-const slideImages = [
-  "https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1920&q=80",
-];
+const slideImages = [banner1, banner2, banner3, banner4];
 
 export function HeroCarousel() {
   const { t } = useLanguage();
