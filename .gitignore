@@ -1,6 +1,9 @@
 # Local-only dev MySQL data directory (see README) — never commit database files
 backend-mysql-dev/
 
+# Deployment exports (DB dumps, media zips) — contains real data, never commit
+deploy-export/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

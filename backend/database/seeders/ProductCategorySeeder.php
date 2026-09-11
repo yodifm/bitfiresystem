@@ -16,7 +16,7 @@ class ProductCategorySeeder extends Seeder
             [
                 'key' => 'fire-hydrant-system',
                 'label' => 'Fire Hydrant System',
-                'image' => 'https://images.unsplash.com/photo-1599700403969-f77b3aa74837?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-hydrant-system.jpg',
                 'items' => [
                     [
                         'name' => 'Hydrant Box Type A1, A2, B, C',
@@ -87,7 +87,7 @@ class ProductCategorySeeder extends Seeder
             [
                 'key' => 'fire-alarm-system',
                 'label' => 'Fire Alarm System',
-                'image' => 'https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-alarm-system.jpg',
                 'items' => [
                     [
                         'name' => 'Conventional Fire Alarm',
@@ -142,7 +142,7 @@ class ProductCategorySeeder extends Seeder
             [
                 'key' => 'fire-extinguisher',
                 'label' => 'Fire Extinguisher',
-                'image' => 'https://images.unsplash.com/photo-1618172193763-c511deb635ca?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-extinguisher.jpg',
                 'items' => [
                     [
                         'name' => 'APAR ABC Powder TONATA 1–9 Kg',
@@ -197,19 +197,19 @@ class ProductCategorySeeder extends Seeder
             [
                 'key' => 'fire-suppression-system',
                 'label' => 'Fire Suppression System',
-                'image' => 'https://images.unsplash.com/photo-1600881333168-2ef49b341f30?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-suppression-system.jpg',
                 'items' => [],
             ],
             [
                 'key' => 'fire-fighting-equipment',
                 'label' => 'Fire Fighting Equipment',
-                'image' => 'https://images.unsplash.com/photo-1581094651181-35942459ef62?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-fighting-equipment.jpg',
                 'items' => [],
             ],
             [
                 'key' => 'fire-hydrant-valves',
                 'label' => 'Fire Hydrant Valves',
-                'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-hydrant-valves.jpg',
                 'items' => [
                     [
                         'name' => 'Butterfly Valve',
@@ -264,13 +264,13 @@ class ProductCategorySeeder extends Seeder
             [
                 'key' => 'fire-and-safety-equipment',
                 'label' => 'Fire and Safety Equipment',
-                'image' => 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/fire-and-safety-equipment.jpg',
                 'items' => [],
             ],
             [
                 'key' => 'service-and-maintenance',
                 'label' => 'Service and Maintenance',
-                'image' => 'https://images.unsplash.com/photo-1516937941344-00b4e0337589?auto=format&fit=crop&w=1000&q=80',
+                'image' => 'product-categories/service-and-maintenance.jpg',
                 'items' => [],
             ],
         ];

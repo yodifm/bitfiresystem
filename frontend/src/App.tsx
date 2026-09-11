@@ -285,11 +285,17 @@ function ProductsSection() {
         {current && (
           <div className="grid lg:grid-cols-3 gap-8">
             <Reveal>
-              <div className="lg:sticky lg:top-24 rounded-lg overflow-hidden shadow-elegant relative group h-72 lg:h-[520px]">
+              <div className="lg:sticky lg:top-24 rounded-lg overflow-hidden shadow-elegant relative group h-72 lg:h-[520px] bg-navy">
+                <img
+                  src={current.image}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-50"
+                />
                 <img
                   src={current.image}
                   alt={current.label}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
